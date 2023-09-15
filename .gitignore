@@ -7,8 +7,6 @@
 *.json
 !ocost_config.sample.yaml
 !.pre-commit-config.yaml
-# Allow configmaps
-!configmap.yaml
 # Tempoary files
 tmp*
 temp*
