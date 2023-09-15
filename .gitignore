@@ -1,0 +1,18 @@
+# IntelliJ
+.idea/
+# Secrets
+*.env*
+!.env.sample
+*config*.y*ml
+*.json
+!ocost_config.sample.yaml
+!.pre-commit-config.yaml
+# Allow configmaps
+!configmap.yaml
+# Tempoary files
+tmp*
+temp*
+!templates
+# Terraform
+*tfstate*
+.terraform
