@@ -14,6 +14,7 @@ RUN --mount=type=cache,target=/root/.cache/go-build \
     go build -v -o main cmd/main.go && \
     chmod +x main
 
+ENV DEBUG="false"
 ENV PORT="8080"
 ENV GIN_MODE="release"
 ENV GROUP_MAP_PATH="/app/group_map.json"

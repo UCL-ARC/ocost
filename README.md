@@ -32,9 +32,9 @@ users dependent on their assigned groups in Azure Active Directory (AAD).
 
 </details>
 
-1. Create a `.env` file from `.env.sample` and replace at least the *__CHANGE_ME__* values
+1. Create a `.env` file from [`.env.sample`](./.env.sample) and replace at least the *__CHANGE_ME__* values
 
-2. Create a `ocost_config.yaml` from `ocost.config.yaml`
+2. Create a `ocost_config.yaml` from [`ocost_config.sample.yaml`](./ocost_config.sample.yaml)
 
 3. Run
 ```bash

@@ -14,3 +14,5 @@ temp*
 # Terraform
 *tfstate*
 .terraform
+# drawio
+.$*
