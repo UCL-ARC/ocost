@@ -5,7 +5,7 @@
 !.env.sample
 *config*.y*ml
 *.json
-!ocost_config.sample.yaml
+!config.sample.yaml
 !.pre-commit-config.yaml
 # Tempoary files
 tmp*

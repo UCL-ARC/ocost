@@ -35,7 +35,7 @@ for documentation.
 
 1. Create a `.env` file from [`.env.sample`](./.env.sample) and replace at least the *__CHANGE_ME__* values
 
-2. Create a `ocost_config.yaml` from [`ocost_config.sample.yaml`](./ocost_config.sample.yaml)
+2. Create a `config.yaml` from [`config.sample.yaml`](./config.sample.yaml)
 
 3. Run
 ```bash
