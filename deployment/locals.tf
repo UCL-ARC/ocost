@@ -5,5 +5,5 @@ locals {
   app_group_map_filename = "group_map.json"
   app_group_map_path     = "/app/${local.app_group_map_filename}"
 
-  ocost_config = yamldecode(file("${path.module}/../ocost_config.yaml"))
+  ocost_config = yamldecode(file("${path.module}/../config.yaml"))
 }

@@ -11,9 +11,9 @@ if [ ! -f "$env_filepath" ]; then
     exit 1
 fi
 
-config_filepath="$SCRIPT_DIR/ocost_config.yaml"
+config_filepath="$SCRIPT_DIR/config.yaml"
 if [ ! -f "$config_filepath" ]; then
-    echo "$config_filepath not found. Please create it from ocost_config.sample.yaml"
+    echo "$config_filepath not found. Please create it from config.sample.yaml"
     exit 1
 fi
 

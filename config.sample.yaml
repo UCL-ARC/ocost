@@ -1,6 +1,5 @@
 ---
-# OCost config file. This should be checked into a private repository
-
+# OCost sample config file. This should be checked into a private repository
 groups:
   # AAD group id -> k8s namespace mapping
   00000000-0000-0000-0000-000000000000:
