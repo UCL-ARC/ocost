@@ -38,36 +38,35 @@ type OpenCostAPIResponse struct {
 }
 
 type OpenCostNamespaceData struct {
-	Name                       string            `json:"name"`
-	Properties                 map[string]string `json:"properties"`
-	Window                     map[string]string `json:"window"`
-	Start                      string            `json:"start"`
-	End                        string            `json:"end"`
-	Minutes                    int               `json:"minutes"`
-	CpuCores                   float64           `json:"cpuCores"`
-	CpuCoreRequestAverage      float64           `json:"cpuCoreRequestAverage"`
-	CpuCoreUsageAverage        float64           `json:"cpuCoreUsageAverage"`
-	CpuCoreHours               float64           `json:"cpuCoreHours"`
-	CpuCost                    float64           `json:"cpuCost"`
-	CpuCostAdjustment          int               `json:"cpuCostAdjustment"`
-	CpuEfficiency              float64           `json:"cpuEfficiency"`
-	GpuCount                   int               `json:"gpuCount"`
-	GpuHours                   int               `json:"gpuHours"`
-	GpuCost                    int               `json:"gpuCost"`
-	GpuCostAdjustment          int               `json:"gpuCostAdjustment"`
-	NetworkTransferBytes       float64           `json:"networkTransferBytes"`
-	NetworkReceiveBytes        float64           `json:"networkReceiveBytes"`
-	NetworkCost                int               `json:"networkCost"`
-	NetworkCrossZoneCost       int               `json:"networkCrossZoneCost"`
-	NetworkCrossRegionCost     int               `json:"networkCrossRegionCost"`
-	NetworkInternetCost        int               `json:"networkInternetCost"`
-	NetworkCostAdjustment      int               `json:"networkCostAdjustment"`
-	LoadBalancerCost           int               `json:"loadBalancerCost"`
-	LoadBalancerCostAdjustment int               `json:"loadBalancerCostAdjustment"`
-	PvBytes                    float64           `json:"pvBytes"`
-	PvByteHours                float64           `json:"pvByteHours"`
-	PvCost                     int               `json:"pvCost"`
-	//Pvs string `json:"pvs"`
+	Name                           string            `json:"name"`
+	Properties                     map[string]string `json:"properties"`
+	Window                         map[string]string `json:"window"`
+	Start                          string            `json:"start"`
+	End                            string            `json:"end"`
+	Minutes                        int               `json:"minutes"`
+	CpuCores                       float64           `json:"cpuCores"`
+	CpuCoreRequestAverage          float64           `json:"cpuCoreRequestAverage"`
+	CpuCoreUsageAverage            float64           `json:"cpuCoreUsageAverage"`
+	CpuCoreHours                   float64           `json:"cpuCoreHours"`
+	CpuCost                        float64           `json:"cpuCost"`
+	CpuCostAdjustment              int               `json:"cpuCostAdjustment"`
+	CpuEfficiency                  float64           `json:"cpuEfficiency"`
+	GpuCount                       int               `json:"gpuCount"`
+	GpuHours                       int               `json:"gpuHours"`
+	GpuCost                        int               `json:"gpuCost"`
+	GpuCostAdjustment              int               `json:"gpuCostAdjustment"`
+	NetworkTransferBytes           float64           `json:"networkTransferBytes"`
+	NetworkReceiveBytes            float64           `json:"networkReceiveBytes"`
+	NetworkCost                    int               `json:"networkCost"`
+	NetworkCrossZoneCost           int               `json:"networkCrossZoneCost"`
+	NetworkCrossRegionCost         int               `json:"networkCrossRegionCost"`
+	NetworkInternetCost            int               `json:"networkInternetCost"`
+	NetworkCostAdjustment          int               `json:"networkCostAdjustment"`
+	LoadBalancerCost               int               `json:"loadBalancerCost"`
+	LoadBalancerCostAdjustment     int               `json:"loadBalancerCostAdjustment"`
+	PvBytes                        float64           `json:"pvBytes"`
+	PvByteHours                    float64           `json:"pvByteHours"`
+	PvCost                         int               `json:"pvCost"`
 	PvCostAdjustment               int               `json:"pvCostAdjustment"`
 	RamBytes                       float64           `json:"ramBytes"`
 	RamByteRequestAverage          float64           `json:"ramByteRequestAverage"`
@@ -83,6 +82,7 @@ type OpenCostNamespaceData struct {
 	ProportionalAssetResourceCosts map[string]string `json:"proportionalAssetResourceCosts"`
 	LbAllocations                  map[string]string `json:"lbAllocations"`
 	SharedCostBreakdown            map[string]string `json:"sharedCostBreakdown"`
+	//Pvs string `json:"pvs"`
 }
 
 func assertNotNil(e error) {
@@ -154,8 +154,8 @@ func userVisibleNamespaces(groups string) Namespaces {
 func openCostDataForPreviousMonth() []map[string]OpenCostNamespaceData {
 	u, err := url.ParseRequestURI(env("OPENCOST_URL"))
 	assertNotNil(err)
-	u.Path = "/allocation"
-	q := u.Query()
+	u.Path = "/allocation/compute"
+	q := u.Query() // Note: this will take ~400 ms
 	q.Set("window", "31d")
 	q.Set("aggregate", "namespace")
 	u.RawQuery = q.Encode()
@@ -189,6 +189,20 @@ func tableRows(visibleNamespaces Namespaces) []TableRow {
 	return tableRows
 }
 
+// Readiness probe
+func ready(context *gin.Context) {
+	resp, err := http.Get(env("OPENCOST_URL") + "/allocation/compute?window=1m")
+	if err != nil || resp.StatusCode != 200 {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"status": "not-ready",
+		})
+	} else {
+		context.JSON(http.StatusOK, gin.H{
+			"status": "ready",
+		})
+	}
+}
+
 // HTML index page
 func index(context *gin.Context) {
 	groupsHeader := context.Request.Header.Get("x-forwarded-groups")
@@ -213,8 +227,9 @@ func main() {
 	router := gin.Default()
 	router.StaticFile("/favicon.ico", "./assets/favicon.ico")
 	router.LoadHTMLGlob("templates/*")
-	router.GET("/", index)
 
+	router.GET("/", index)
+	router.GET("/ready", ready)
 	router.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "pong",
