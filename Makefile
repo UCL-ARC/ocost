@@ -30,6 +30,6 @@ dev-deployment:
 	ENVIRONMENT=dev . init.sh && \
 	$(call terraform-apply, ./deployment)
 
-destroy:
+dev-destroy:
 	. init.sh && \
 	k3d cluster delete "$$DEV_CLUSTER_NAME"

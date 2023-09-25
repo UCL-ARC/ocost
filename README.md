@@ -1,6 +1,6 @@
 # OCost – O(pen)cost Frontend
 > **Warning**
-> Not production ready. Use at your own risk!
+> This repository is in development
 
 OCost is a super simple frontend for [OpenCost](https://github.com/opencost/opencost)
 and includes a deployment template. Kubernetes namespace costs are displayed to
@@ -11,7 +11,7 @@ for documentation.
 <details>
   <summary>0. Create an AAD app</summary>
 
-  You **must** sufficient permissions on Azure active directory admin to perform these steps
+  You **must** have sufficient permissions on Azure active directory to perform these steps.
 
   0.0. Go to https://portal.azure.com
 

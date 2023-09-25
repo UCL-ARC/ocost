@@ -38,7 +38,7 @@ resource "kubernetes_deployment" "ocost" {
           }
           env {
             name  = "OPENCOST_URL"
-            value = "http://${helm_release.opencost.name}.${helm_release.opencost.namespace}.svc.cluster.local:9003"
+            value = "http://${local.opencost_service_name}.${helm_release.opencost.namespace}.svc.cluster.local:9003"
           }
           port {
             name           = "http"
@@ -50,6 +50,22 @@ resource "kubernetes_deployment" "ocost" {
             mount_path = local.app_group_map_path
             read_only  = true
             sub_path   = local.app_group_map_filename
+          }
+          liveness_probe {
+            http_get {
+              path = "/ping"
+              port = local.app_container_port
+            }
+            initial_delay_seconds = 2
+            period_seconds        = 5
+          }
+          readiness_probe {
+            http_get {
+              path = "/ready"
+              port = local.app_container_port
+            }
+            initial_delay_seconds = 30
+            period_seconds        = 10
           }
         }
         volume {

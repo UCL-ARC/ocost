@@ -6,4 +6,6 @@ locals {
   app_group_map_path     = "/app/${local.app_group_map_filename}"
 
   ocost_config = yamldecode(file("${path.module}/../config.yaml"))
+
+  opencost_service_name = helm_release.opencost.name
 }

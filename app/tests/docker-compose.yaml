@@ -45,7 +45,7 @@ services:
     environment:
       PORT: "8081"
     healthcheck:
-      test: ["CMD", "curl", "--fail", "http://0.0.0.0:8081/allocation"]
+      test: ["CMD", "curl", "--fail", "http://0.0.0.0:8081/allocation/compute"]
       interval: 5s
       retries: 10
       timeout: 60s
