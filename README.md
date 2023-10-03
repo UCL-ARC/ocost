@@ -2,7 +2,7 @@
 > **Warning**
 > This repository is in development
 
-OCost is a super simple frontend for [OpenCost](https://github.com/opencost/opencost)
+OCost is a simple frontend for [OpenCost](https://github.com/opencost/opencost)
 and includes a deployment template. Kubernetes namespace costs are displayed to
 users dependent on their assigned groups in Azure Active Directory. See [doc/](./doc)
 for documentation.
